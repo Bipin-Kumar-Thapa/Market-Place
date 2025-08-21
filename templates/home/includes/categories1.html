@@ -1,0 +1,36 @@
+{%load static%}
+<section class="section-categories padding-y-sm">
+  <div class="container">
+    <h2>Categories</h2>
+
+    <div class="row">
+      {% for category in categories %}
+      <div class="col-6 col-sm-4 col-md-3 mb-4">
+        <a href="{{ category.get_url }}" class="text-decoration-none">
+          <div class="card h-100 shadow-sm category-card">
+            <div class="media-box">
+              {% if category.category_image %}
+                <img
+                  src="{{ category.category_image.url }}"
+                  alt="{{ category.category_name }}"
+                  loading="lazy"
+                />
+              {% else %}
+                <img
+                  src="{% static 'images/default-category.jpg' %}"
+                  alt="{{ category.category_name }}"
+                  loading="lazy"
+                />
+              {% endif %}
+            </div>
+
+            <div class="card-body d-flex align-items-center">
+              <h6 class="mb-0 font-weight-bold text-dark">{{ category.category_name }}</h6>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

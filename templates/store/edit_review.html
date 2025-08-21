@@ -1,0 +1,18 @@
+{% comment %} {% extends 'master/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section-content padding-y bg">
+  <div class="container">
+    <h2>Edit Your Review</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="btn btn-primary">Update Review</button>
+      <a href="{% url 'product_detail' category_slug=product.category.slug product_slug=product.slug %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</section>
+{% endblock %} {% endcomment %}

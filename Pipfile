@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django-jazzmin = "*"
+pillow = "*"
+django-admin-honeypot-updated-2021 = "*"
+psycopg2-binary = "*"
+django = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"

@@ -1,0 +1,90 @@
+{% load static %}
+<header class="section-header" style="background-color: #edeff1;">
+  <section class="header-main border-bottom py-2">
+    <div class="container-fluid px-4">
+      <div class="row align-items-center justify-content-between">
+
+        <!-- Logo (more to the left) -->
+        <div class="col-lg-2 col-md-3 col-6 pl-3">
+          <a href="{% url 'home' %}" class="brand-wrap d-inline-block">
+            {% if site_setting.logo %}
+              <img class="logo" src="{{ site_setting.logo.url }}" style="height: 50px; width: auto;" alt="Site Logo" />
+            {% else %}
+              <img class="logo" src="{{ site_setting.default_image.url }}" style="height: 50px; width: auto;" alt="Site Logo" />
+            {% endif %}
+          </a>
+        </div>
+
+        <!-- Category Dropdown (dynamic) -->
+        <div class="col-lg-2 col-md-3 d-none d-lg-block">
+          <div class="category-wrap dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle btn-block" data-toggle="dropdown" style="white-space: nowrap;">
+              <i class="fa fa-bars"></i> All Categories
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'store' %}">All Products</a>
+              {% for category in links %}
+                <a class="dropdown-item" href="{{ category.get_url }}">
+                  {{ category.category_name }}
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Button -->
+        <div class="col-lg-1 col-md-2 d-none d-lg-block">
+          <a href="{% url 'store' %}" class="btn btn-outline-primary btn-block">
+            Products
+          </a>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="col-lg-4 col-md-6 col-sm-12 my-2" style="padding-right: 0;">
+          <form action="{% url 'search' %}" method="GET">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search..." name="keyword" />
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Login & Cart (closer to search) -->
+        <div class="col-lg-3 col-sm-6 col-12 mt-3 mt-lg-0" style="margin-left: -25px;">
+          <div class="d-flex justify-content-end align-items-center gap-2">
+            {% if user.id is None %}
+              <div class="text-right mr-2">
+                <small class="text-muted d-block">Welcome guest!</small>
+                <div style="color:black;">
+                  <a href="{% url 'user_login' %}">Login</a> |
+                  <a href="{% url 'user_register' %}">Register</a>
+                </div>
+              </div>
+            {% else %}
+              <div class="text-right mr-2">
+                <small class="text-muted d-block">Welcome {{ user.first_name }}!</small>
+                <div style="color:black;">
+                  <a href="{% url 'user_dashboard' %}">Dashboard</a> |
+                  <a href="{% url 'user_logout' %}">Logout</a>
+                </div>
+              </div>
+            {% endif %}
+
+            <a href="{% url 'cart' %}" class="position-relative ml-1">
+              <div class="icon icon-sm rounded-circle border p-2">
+                <i class="fa fa-shopping-cart"></i>
+              </div>
+              <span class="badge badge-pill badge-danger notify position-absolute" style="top: -5px; right: -10px;">{{ cart_count }}</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</header>
+

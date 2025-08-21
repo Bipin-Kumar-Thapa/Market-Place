@@ -1,0 +1,150 @@
+{% extends 'master/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section-content padding-y bg">
+  <div class="container">
+    <div class="card">
+      <div class="row no-gutters">
+        <aside class="col-md-6">
+          <article class="gallery-wrap">
+            <div class="img-big-wrap">
+              <a href="#"><img src="{{ product.images.url }}" alt="{{ product.product_name }}" /></a>
+            </div>
+          </article>
+        </aside>
+        <main class="col-md-6 border-left">
+          <form action="{% url 'add_cart' product.id %}" method="POST">
+            {% csrf_token %}
+            <article class="content-body">
+              <h2 class="title">{{ product.product_name }}</h2>
+              <div class="mb-3">
+                {% if product.discount_price %}
+                  <var class="price h4" style="text-decoration: line-through;">Rs.{{ product.price }}</var><br>
+                  <var class="price h4">Rs.{{ product.discount_price }}</var>
+                {% else %}
+                  <var class="price h4">Rs.{{ product.price }}</var>
+                {% endif %}
+              </div>
+              <p>{{ product.description }}</p>
+
+              <hr />
+              {% if product.variation_set.colors.all %}
+                <div class="row">
+                  <div class="item-option-select">
+                    <h6>Choose Color</h6>
+                    <select name="color" class="form-control" required>
+                      <option value="" disabled>Select</option>
+                      {% for i in product.variation_set.colors %}
+                        <option value="{{ i.variation_value|lower }}" {% if forloop.first %} selected {% endif %}>
+                          {{ i.variation_value|capfirst }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              {% else %}
+                <p><strong>No color variations available for this product.</strong></p>
+              {% endif %}
+
+              {% if product.variation_set.sizes.all %}
+                <div class="row">
+                  <div class="item-option-select">
+                    <h6>Select Size</h6>
+                    <select name="size" class="form-control" required>
+                      <option value="" disabled>Select</option>
+                      {% for i in product.variation_set.sizes %}
+                        <option value="{{ i.variation_value|lower }}" {% if forloop.first %} selected {% endif %}>
+                          {{ i.variation_value|capfirst }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              {% else %}
+                <p><strong>No size variations available for this product.</strong></p>
+              {% endif %}
+              <hr />
+              {% include 'store/includes/new_buttons.html' %}
+            </article>
+          </form>
+        </main>
+      </div>
+    </div>
+
+    <br />
+    <div class="row">
+      <div class="col-md-9">
+        {% if user.is_authenticated and not edit_review_id %}
+          <header class="section-heading">
+            <h3>Write a Review</h3>
+          </header>
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+          </form>
+          <br />
+        {% elif not user.is_authenticated %}
+          <p>You must be logged in to leave a review.</p>
+          <br />
+        {% endif %}
+        <header class="section-heading">
+          <h3>Customer Reviews</h3>
+        </header>
+        {% if reviews %}
+          {% for review in reviews %}
+            <article class="box mb-3">
+              <div class="icontext w-100">
+                <img 
+                  src="{% if review.user.profile_picture %}{{ review.user.profile_picture.url }}{% else %}{% static 'images/avatars/avatar4.jpg' %}{% endif %}" 
+                  class="img-xs icon rounded-circle" 
+                  alt="{{ review.user.get_full_name|default:review.user.username }}'s avatar" 
+                />
+                <div class="text">
+                  <span class="date text-muted float-md-right">{{ review.created_at|date:"d.m.Y" }}</span>
+                  <h6 class="mb-1">{{ review.user.first_name }} {{ review.user.last_name }}</h6>
+                </div>
+              </div>
+              <div class="mt-3">
+                {% if edit_review_id == review.id %}
+                  <!-- Inline Edit Form -->
+                  <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="hidden" name="edit_review" value="{{ review.id }}">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a href="{% url 'product_detail' category_slug=product.category.slug product_slug=product.slug %}" class="btn btn-secondary">Cancel</a>
+                  </form>
+                {% else %}
+                  <!-- Rating at the top -->
+                  <small><strong>Rating: {{ review.rating }} / 5</strong></small>
+                  <!-- Comment below rating -->
+                  <p>{{ review.review_text }}</p>
+                  <!-- Image below comment -->
+                  {% if review.review_image %}
+                    <img src="{{ review.review_image.url }}" alt="Review image" class="img-thumbnail mb-2" style="max-width: 250px; height: auto;" />
+                  {% endif %}
+
+                  {% if review.user == user %}
+                    <div>
+                      <a href="?edit_review_id={{ review.id }}" class="btn btn-warning btn-sm">Edit</a>
+
+                      <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" name="delete_review" value="{{ review.id }}" class="btn btn-danger btn-sm">Delete</button>
+                      </form>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </article>
+          {% endfor %}
+        {% else %}
+          <p>No reviews yet. Be the first to review this product!</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

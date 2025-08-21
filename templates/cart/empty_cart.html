@@ -1,0 +1,12 @@
+{%load static%}
+<div class="text-center py-5">
+  <img src="{% static 'images/misc/empty-cart.svg' %}" alt="Empty Cart" style="max-width: 180px;" class="mb-4">
+  <h2 class="mb-3">Your Shopping Cart is Empty</h2>
+  <p class="text-muted mb-4">
+    Looks like you haven't added anything yet.
+    <br>Start shopping to fill it up!
+  </p>
+  <a href="{% url 'store' %}" class="btn btn-primary btn-lg">
+    <i class="fas fa-shopping-bag mr-2"></i> Continue Shopping
+  </a>
+</div>

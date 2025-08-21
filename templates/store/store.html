@@ -1,0 +1,191 @@
+{% extends 'master/base.html' %}
+{% load static %}
+{% block content %}
+<!-- ========================= SECTION PAGETOP ========================= -->
+<section class="section-pagetop bg">
+  <div class="container">
+    {% if keyword %}
+      <h2 class="title-page">{{ keyword }}</h2>
+      <p>{{ product_count }} items found for "{{ keyword }}"</p>
+    {% else %}
+      <h2 class="title-page">Our Products</h2>
+      <p>{{product_count }} products available</p>
+    {% endif %}
+  </div>
+</section>
+<!-- ========================= SECTION INTRO END// ========================= -->
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+  <div class="container">
+    <div class="row">
+      <aside class="col-md-3">
+        <!-- Categories Filter -->
+        <div class="card">
+          <article class="filter-group">
+            <header class="card-header">
+              <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                <i class="icon-control fa fa-chevron-down"></i>
+                <h6 class="title">Categories</h6>
+              </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_1" style="">
+              <div class="card-body">
+                <ul class="list-menu">
+                  {% for category in links %}
+                    <li>
+                      <a href="{{ category.get_url }}">
+                        {{ category.category_name }}
+                      </a>
+                    </li>
+                  {% empty %}
+                    <li>No categories available</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Sizes Filter -->
+        <div class="card">
+          <article class="filter-group">
+            <header class="card-header">
+              <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
+                <i class="icon-control fa fa-chevron-down"></i>
+                <h6 class="title">Sizes</h6>
+              </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_4" style="">
+              <div class="card-body">
+                <label class="checkbox-btn">
+                  <input type="checkbox" />
+                  <span class="btn btn-light"> XS </span>
+                </label>
+
+                <label class="checkbox-btn">
+                  <input type="checkbox" />
+                  <span class="btn btn-light"> SM </span>
+                </label>
+
+                <label class="checkbox-btn">
+                  <input type="checkbox" />
+                  <span class="btn btn-light"> LG </span>
+                </label>
+
+                <label class="checkbox-btn">
+                  <input type="checkbox" />
+                  <span class="btn btn-light"> XXL </span>
+                </label>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="card">
+          <article class="filter-group">
+            <header class="card-header">
+              <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+                <i class="icon-control fa fa-chevron-down"></i>
+                <h6 class="title">Price Range</h6>
+              </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_3" style="">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Min</label>
+                    <select class="mr-2 form-control">
+                      <option value="0">Rs.0</option>
+                      <option value="50">Rs.50</option>
+                      <option value="100">Rs.100</option>
+                      <option value="150">Rs.150</option>
+                      <option value="200">Rs.200</option>
+                      <option value="500">Rs.500</option>
+                      <option value="1000">Rs.1000</option>
+                    </select>
+                  </div>
+                  <div class="form-group text-right col-md-6">
+                    <label>Max</label>
+                    <select class="mr-2 form-control">
+                      <option value="50">Rs.50</option>
+                      <option value="100">Rs.100</option>
+                      <option value="150">Rs.150</option>
+                      <option value="200">Rs.200</option>
+                      <option value="500">Rs.500</option>
+                      <option value="1000">Rs.1000</option>
+                      <option value="2000">Rs.2000+</option>
+                    </select>
+                  </div>
+                </div>
+                <button class="btn btn-block btn-primary">Apply</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </aside>
+
+      <main class="col-md-9">
+        {% if product_count > 0 %}
+          {% include 'store/includes/sort_dropdown.html' %}
+        {% endif %}
+        
+        <div class="row">
+          {% if product_count > 0 %}
+            {% for product in products %}
+            <div class="col-md-4">
+              <figure class="card card-product-grid">
+                <div class="img-wrap">
+                  {% if product.images %}
+                  <a href="{{ product.get_url }}">
+                    <img src="{{ product.images.url }}" />
+                  </a>
+                  {% else %}
+                  <img src="{{ site_setting.default_image.url }}" />
+                  {% endif %}
+                </div>
+                <figcaption class="info-wrap">
+                  <div class="fix-height">
+                    <a href="{{ product.get_url }}" class="title">
+                      {{ product.product_name|truncatechars:57 }}
+                    </a>
+                    <div class="price-wrap mt-2">
+                      {% if product.discount_price %}
+                        <span class="price">Rs.{{ product.discount_price }}</span>
+                        <del class="price-old">Rs.{{ product.price }}</del>
+                      {% else %}
+                        <span class="price">Rs.{{ product.price }}</span>
+                      {% endif %}
+                    </div>
+                    {% if product.stock <= 0 %}
+                     <p class="text-warning small mb-1">Out of Stock</p>
+                    {% elif product.stock <= 5 %}
+                      <p class="text-warning small mb-1">Only {{ product.stock }} left in stock!</p>
+                    {% endif %}
+                  </div>
+                  <a href="{{ product.get_url }}" class="btn btn-block btn-primary">View Details </a>
+                </figcaption>
+              </figure>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="col-12">
+              <div class="card shadow-sm border-0">
+                <div class="card-body text-center py-5">
+                  <i class="fa fa-search fa-2x mb-3"></i>
+                  <h4>No results found</h4>
+                  <p class="text-muted">We couldn't find any matches{% if keyword %} for “{{ keyword }}”{% endif %}. Please try again.</p>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        {% include 'store/includes/pagination.html' %}
+      </main>
+    </div>
+  </div>
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+{% endblock %}

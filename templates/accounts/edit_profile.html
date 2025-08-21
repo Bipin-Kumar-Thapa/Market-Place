@@ -1,0 +1,71 @@
+{%extends 'master/base.html'%} {%load static%} {%block content%}
+<section class="section-conten padding-y bg">
+  <div class="container">
+    <div class="row">
+      <aside class="col-md-3">
+        {%include 'accounts/includes/sidebar.html'%}
+      </aside>
+
+      <main class="col-md-9">
+        <article class="card">
+          <header class="card-header">
+            <strong class="d-inline-block mr-3">Edit your profile</strong>
+          </header>
+          <div class="card-body">
+            <div class="text-right">
+              
+             <img
+                src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'images/default/default-user.png' %}{% endif %}"
+                alt="Profile Picture"
+                class="profile-img"/>
+             
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                 {{ form.non_field_errors }}
+                <form
+                  action="{%url 'edit_profile'%}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                {%csrf_token%}
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      {{ form.first_name.label_tag }} {{ form.first_name }}
+                    </div>
+                    <div class="form-group col-md-6">
+                     {{ form.last_name.label_tag }} {{ form.last_name }}
+                    </div>
+                    <div class="form-group col-md-6">
+                     {{ form.email.label_tag }} {{ form.email }}
+                    </div>
+                    <div class="form-group col-md-6">
+                      {{ form.phone_number.label_tag }} {{ form.phone_number }}
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-4">
+                      {{ form.gender.label_tag }} {{ form.gender }}
+                    </div>
+                    <div class="form-group col-md-4">
+                      {{ form.profile_picture.label_tag }} {{ form.profile_picture }}
+                    </div>
+                     <div class="form-group col-md-4">
+                      {{ form.payment_qr.label_tag }} {{ form.payment_qr }}
+                    </div>
+                  </div>
+                  <input type="submit" value="Save" class="btn btn-primary" />
+                </form>
+              </div>
+            </div>
+            <!-- row.// -->
+          </div>
+          <!-- card-body .// -->
+        </article>
+        <!-- order-group.// -->
+      </main>
+    </div>
+    <!-- row.// -->
+  </div>
+</section>
+{%endblock%}

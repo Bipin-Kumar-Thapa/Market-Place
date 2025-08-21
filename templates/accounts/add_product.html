@@ -1,0 +1,82 @@
+{% extends 'master/base.html' %}
+{% load static %}
+{% block content %}
+<section class="section-conten padding-y bg">
+  <div class="container">
+    <div class="row">
+      <aside class="col-md-3">
+        {% include 'accounts/includes/sidebar.html' %}
+      </aside>
+
+      <main class="col-md-9">
+        <article class="card">
+          <header class="card-header d-flex justify-content-between align-items-center">
+            <strong class="d-inline-block mr-3">Post a Product</strong>
+            {# Optional: link to your “My Products” page #}
+            {# <a href="{% url 'my_products' %}" class="btn btn-sm btn-light">My Products</a> #}
+          </header>
+
+          <div class="card-body">
+            {# Messages #}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mb-3">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+
+            {{ form.non_field_errors }}
+
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  {{ form.product_name.label_tag }} {{ form.product_name }}
+                  {{ form.product_name.errors }}
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  {{ form.category.label_tag }} {{ form.category }}
+                  {{ form.category.errors }}
+                </div>
+                <div class="form-group col-md-3">
+                  {{ form.price.label_tag }} {{ form.price }}
+                  {{ form.price.errors }}
+                </div>
+                <div class="form-group col-md-3">
+                  {{ form.discount_price.label_tag }} {{ form.discount_price }}
+                  {{ form.discount_price.errors }}
+                </div>
+                <div class="form-group col-md-3">
+                  {{ form.stock.label_tag }} {{ form.stock }}
+                  {{ form.stock.errors }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                {{ form.description.label_tag }} {{ form.description }}
+                {{ form.description.errors }}
+              </div>
+
+              <div class="form-group">
+                {{ form.images.label_tag }} {{ form.images }}
+                {{ form.images.errors }}
+              </div>
+
+              <div class="form-group">
+                {{ form.status.label_tag }} {{ form.status }}
+                <small class="form-text text-muted">If off, your product stays hidden even after approval.</small>
+                {{ form.status.errors }}
+              </div>
+
+              <button type="submit" class="btn btn-primary">Submit for Approval</button>
+            </form>
+          </div>
+        </article>
+      </main>
+    </div>
+  </div>
+</section>
+{% endblock %}

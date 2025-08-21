@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="max-age=604800" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>{{site_setting.site_title}}</title>
+    <meta name="description" content="{{ site_setting.meta_description }}">
+    <meta name="keywords" content="{{ site_setting.meta_keywords }}">
+
+    {% if site_setting.logo %}
+    <meta property="og:image" content="{{ site_setting.logo.url }}">
+    {% endif %}
+
+    {% if site_setting.favicon %}
+    <link
+      href="{{site_setting.favicon.url}}"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
+    {%endif%}
+
+    <!-- Open Graph for social media -->
+    <meta property="og:title" content="{{ site_setting.site_title }}">
+    <meta property="og:description" content="{{ site_setting.meta_description }}">
+
+    <!-- jQuery -->
+    <script
+      src="{% static 'js/jquery-2.0.0.min.js' %}"
+      type="text/javascript"
+    ></script>
+
+    <!-- Bootstrap4 files-->
+    <script
+      src="{% static 'js/bootstrap.bundle.min.js' %}"
+      type="text/javascript"
+    ></script>
+    <link
+      href="{% static 'css/bootstrap.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <!-- Font awesome 5 -->
+    <link
+      href="{% static 'fonts/fontawesome/css/all.min.css' %}"
+      type="text/css"
+      rel="stylesheet"
+    />
+
+    {% comment %} <link
+      href="{% static 'css/custom.css' %}"
+      type="text/css"
+      rel="stylesheet"
+    /> {% endcomment %}
+
+    <!-- custom style -->
+    <link href="{% static 'css/ui.css' %}" rel="stylesheet" type="text/css" />
+    <link
+      href="{% static 'css/responsive.css' %}"
+      rel="stylesheet"
+      media="only screen and (max-width: 1200px)"
+    />
+
+    <!-- custom javascript -->
+    <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+      /// some script
+
+      // jquery ready start
+      $(document).ready(function () {
+        // jQuery code
+      });
+      // jquery end
+    </script>
+  </head>
+  <body>
+    {% include 'includes/navbar.html' %}
+    {% include 'includes/alerts.html' %}  {# <-- Show flash alerts here #}
+    {% block content %}
+    {% comment %} Page Specific Content will go here {% endcomment %}
+    {% endblock %} 
+    {% include 'includes/footer.html' %}
+  </body>
+</html>

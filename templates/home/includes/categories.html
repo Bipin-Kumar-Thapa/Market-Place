@@ -1,0 +1,33 @@
+{%load static%}
+<section class="section-name padding-y-sm">
+  <div class="container">
+    <header class="section-heading">
+      
+      <h3 class="section-title">Categories</h3>
+    </header>
+    <!-- sect-heading -->
+
+    <div class="row">
+      {% for category in categories %}
+      <div class="col-md-3">
+        <div class="card card-product-grid">
+          <a href="{{ category.get_url }}" class="img-wrap">
+            {% if category.category_image %}
+              <img src="{{ category.category_image.url }}" alt="{{ category.category_name }}" />
+            {% else %}
+              <img src="{% static 'images/default-category.jpg' %}" alt="No image" />
+            {% endif %}
+          </a>
+          <figcaption class="info-wrap">
+            <a href="{{ category.get_url }}" class="title">
+              {{category.category_name}}
+            </a>
+          </figcaption>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <!-- row.// -->
+  </div>
+  <!-- container // -->
+</section>
