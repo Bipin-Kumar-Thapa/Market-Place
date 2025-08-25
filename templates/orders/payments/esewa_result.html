@@ -1,0 +1,11 @@
+{% extends 'master/base.html' %}
+{% block content %}
+<div class="container py-4">
+  <h3>Order #{{ order.id }}</h3>
+  {% if messages %}{% for m in messages %}<div class="alert alert-{{ m.tags }}">{{ m }}</div>{% endfor %}{% endif %}
+  {% if gateway_info %}
+    <details class="mt-3"><summary>Gateway response (test)</summary><pre>{{ gateway_info|safe }}</pre></details>
+  {% endif %}
+  <a href="/" class="btn btn-primary mt-3">Continue shopping</a>
+</div>
+{% endblock %}

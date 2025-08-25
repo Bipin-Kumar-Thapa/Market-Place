@@ -1,0 +1,13 @@
+{% extends 'master/base.html' %}
+{% block content %}
+<div class="container py-5">
+  <h5>Redirecting to eSewa (TEST)…</h5>
+  <form id="esewaForm" method="POST" action="{{ ESEWA_FORM_URL }}">
+    {% for k, v in form.items %}
+      <input type="hidden" name="{{ k }}" value="{{ v }}">
+    {% endfor %}
+    <noscript><button class="btn btn-success">Continue to eSewa</button></noscript>
+  </form>
+</div>
+<script>document.getElementById('esewaForm').submit()</script>
+{% endblock %}

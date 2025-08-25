@@ -1,0 +1,130 @@
+{%extends 'master/base.html'%} {%load static%} {%block content%}
+<section class="section-content padding-y bg">
+  <div class="container">
+    <!-- ============================ COMPONENT 1 ================================= -->
+    <h4 class="text-center mb-10"> Review Your Order and Make Payment </h4>
+    <div class="row">
+      <aside class="col-lg-8">
+        <div class="card">
+          <h5 class="card-header">Billing Address</h5>
+          <div class="card-body">
+            <p class="card-text mb-0">{{order.full_name}}</p>
+            <p class="card-text mb-0">{{order.full_address}}</p>
+            <p class="card-text mb-0">{{order.city}}</p>
+            <p class="card-text mb-0">{{order.country}}</p>
+            <p class="card-text mb-0">{{order.email}}</p>
+            <p class="card-text mb-0">{{order.phone}}</p>
+
+            {%if order.order_note%}
+            <b>Order Note: </b> {{order.order_note}}
+            {%endif%}
+          </div>
+        </div>
+
+        <div class="card">
+          <h5 class="card-header">Payment Methods</h5>
+          <div class="card-body">
+            {% comment %} <p class="card-text mb-0">PayPal</p> {% endcomment %}
+            <p class="card-text mb-0">eSewa</p>
+            {% comment %} <p class="card-text mb-0">Khalti</p> {% endcomment %}
+            {% comment %} <p class="card-text mb-0">QR Payment</p> {% endcomment %}
+            {% comment %} <p class="card-text mb-0">Cash On Delivery</p> {% endcomment %}
+          </div>
+        </div>
+
+        <div class="card">
+          <h5 class="card-header">Review Product</h5>
+          <div class="card-body">
+             <table class="table table-borderless table-shopping-cart">
+              <thead class="text-muted">
+                <tr class="small text-uppercase">
+                  <th scope="col">Product</th>
+                  <th scope="col" width="120">Quantity</th>
+                  <th scope="col" width="120">Price</th>
+                </tr>
+              </thead>
+             <tbody>
+              {%for cart_item in cart_items%}
+              <tr>
+                <td>
+                  <figure class="itemside align-items-center">
+                    <div class="aside">
+                      <img src="{{cart_item.product.images.url}}" class="img-sm" />
+                    </div>
+                    <figcaption class="info">
+                      <a href="{{cart_item.product.get_url}}" class="title text-dark">
+                        {{cart_item.product.product_name}}
+                        </a>
+                        {% if cart_item.product.stock <= 0 %}
+                          <p class="text-danger small mb-1">Out of stock</p>
+                        {% elif cart_item.product.stock <= 5 %}
+                          <p class="text-warning small mb-1">Only {{ cart_item.product.stock }} left in stock!</p>
+                        {% endif %}
+                      <p class="text-muted small">
+                        {%if cart_item.variations.all%}
+                          {%for item in cart_item.variations.all%}
+                            {{item.variation_category|capfirst}}: {{item.variation_value|capfirst}} <br>
+                          {%endfor%}
+                        {%endif%}
+                      </p>
+                    </figcaption>
+                  </figure>
+                </td>
+                <td>
+                 <label> {{cart_item.quantity}} </label>
+                </td>
+                <td>
+                  <div class="price-wrap">
+                    <var class="price">Rs. {{cart_item.sub_total}}</var>
+                    <small class="text-muted"> Rs. {{cart_item.product.price}} each </small>
+                  </div>
+                  <!-- price-wrap .// -->
+                </td>
+               
+              </tr>
+           {%endfor%}
+            </tbody>
+            </table>
+
+          </div>
+        </div>
+        <!-- card.// -->
+      </aside>
+      <!-- col.// -->
+      <aside class="col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <dl class="dlist-align">
+              <dt>Total price:</dt>
+              <dd class="text-right">Rs. {{total}}</dd>
+            </dl>
+            <dl class="dlist-align">
+              <dt>Tax:</dt>
+              <dd class="text-right">Rs. {{tax}}</dd>
+            </dl>
+            <dl class="dlist-align">
+              <dt>Grand Total:</dt>
+              <dd class="text-right text-dark b">
+                <strong>Rs. {{grand_total}}</strong>
+              </dd>
+            </dl>
+            <hr />
+            <p class="text-center mb-3">
+              <img src="{%static 'images/misc/payments.png'%}" height="26" />
+            </p>
+            <a href="{%url 'esewa_start' order.id %}" class="btn btn-primary btn-block">
+              Pay With eSewa
+            </a>
+          </div>
+          <!-- card-body.// -->
+        </div>
+        <!-- card.// -->
+      </aside>
+      <!-- col.// -->
+    </div>
+    <!-- row.// -->
+    <!-- ============================ COMPONENT 1 END .// ================================= -->
+  </div>
+  <!-- container .//  -->
+</section>
+{%endblock%}
